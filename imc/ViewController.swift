@@ -92,15 +92,17 @@ class ViewController: UIViewController {
             self.weightInput.topAnchor.constraint(equalTo: self.subTitleLabel.bottomAnchor, constant: 40),
             self.weightInput.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 20),
             self.weightInput.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -220),
+            self.weightInput.heightAnchor.constraint(equalToConstant: 40),
             
             self.heigthInput.topAnchor.constraint(equalTo: self.subTitleLabel.bottomAnchor, constant: 40),
-            self.heigthInput.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 220),
+            self.heigthInput.leadingAnchor.constraint(equalTo: self.weightInput.trailingAnchor, constant: 40),
             self.heigthInput.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -20),
+            self.heigthInput.heightAnchor.constraint(equalTo: self.weightInput.heightAnchor),
             
             self.calculateButton.topAnchor.constraint(equalTo: self.heigthInput.bottomAnchor,constant: 30),
             self.calculateButton.leadingAnchor.constraint(equalTo: self.view.leadingAnchor,constant: 20),
-            self.calculateButton.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -20)
-            
+            self.calculateButton.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -20),
+            self.calculateButton.heightAnchor.constraint(equalTo: self.weightInput.heightAnchor)
             
             
         
