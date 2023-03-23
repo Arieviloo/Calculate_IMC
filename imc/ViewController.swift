@@ -9,8 +9,6 @@ import UIKit
 
 class ViewController: UIViewController {
     
-    var imc: Double = 0
-    
     lazy var titleLabel: UILabel = {
         let title = UILabel()
         title.translatesAutoresizingMaskIntoConstraints = false
@@ -25,8 +23,44 @@ class ViewController: UIViewController {
         subtitle.translatesAutoresizingMaskIntoConstraints = false
         subtitle.text = "Descubra o seu índice de massa corporal"
         subtitle.textColor = .white
-        subtitle.font = UIFont.systemFont(ofSize: 14)
+        subtitle.font = UIFont.systemFont(ofSize: 16)
         return subtitle
+    }()
+    
+    lazy var weightLabel: UILabel = {
+        let lb = UILabel()
+        lb.translatesAutoresizingMaskIntoConstraints = false
+        lb.text = "Peso (Kg)"
+        lb.textColor = .white
+        lb.font = UIFont.systemFont(ofSize: 16)
+        return lb
+    }()
+    
+    lazy var heightLabel: UILabel = {
+        let lb = UILabel()
+        lb.translatesAutoresizingMaskIntoConstraints = false
+        lb.text = "Altura(m)"
+        lb.textColor = .white
+        lb.font = UIFont.systemFont(ofSize: 16)
+        return lb
+    }()
+    
+    
+    
+    lazy var textLabel: UILabel = {
+        let title = UILabel()
+        title.translatesAutoresizingMaskIntoConstraints = false
+        title.textColor = .white
+        title.font = UIFont.systemFont(ofSize: 24)
+        return title
+    }()
+    
+    lazy var resultLabel: UILabel = {
+        let title = UILabel()
+        title.translatesAutoresizingMaskIntoConstraints = false
+        title.textColor = .white
+        title.font = UIFont.systemFont(ofSize: 24)
+        return title
     }()
     
     lazy var weightInput: UITextField = {
@@ -48,7 +82,7 @@ class ViewController: UIViewController {
         tf.backgroundColor = .white
         tf.borderStyle = .roundedRect
         tf.keyboardType = .decimalPad
-        tf.placeholder = "Ex: 170"
+        tf.placeholder = "Ex: 1.70"
         tf.textColor = .gray
         return tf
     }()
@@ -56,7 +90,7 @@ class ViewController: UIViewController {
     lazy var calculateButton:UIButton = {
         let btn = UIButton()
         btn.translatesAutoresizingMaskIntoConstraints = false
-        btn.setTitle("Logar", for: .normal)
+        btn.setTitle("Calcular", for: .normal)
         btn.titleLabel?.font = UIFont.systemFont(ofSize: 18)
         btn.setTitleColor(.white, for: .normal)
         btn.clipsToBounds = true
@@ -81,13 +115,18 @@ class ViewController: UIViewController {
         self.view.addSubview(self.weightInput)
         self.view.addSubview(self.heigthInput)
         self.view.addSubview(self.calculateButton)
+        self.view.addSubview(self.textLabel)
+        self.view.addSubview(self.resultLabel)
         self.view.addSubview(self.resultImage)
+        self.view.addSubview(self.weightLabel)
+        self.view.addSubview(self.heightLabel)
         self.setUpConstraints()
     }
     
     @objc func tappedCalculate(){
      
-        if let weight = Double(self.weightInput.text!), let height = Double(self.heigthInput.text!) {
+        if let weight = Double(weightInput.text!), let height = Double(heigthInput.text!) {
+            var imc: Double = 0
             imc = weight / (height*height)
             
             var result: String = ""
@@ -110,13 +149,11 @@ class ViewController: UIViewController {
                 image = "obesidade"
                 
             }
-            
+            self.textLabel.text = "Seu índice de massa corporal é"
+            self.resultLabel.text = "\(Int(imc)): \(result) "
             self.resultImage.image = UIImage(named: image)
         }
      
-        
-    
-        print(imc)
     }
     
     private func setUpConstraints() {
@@ -127,12 +164,18 @@ class ViewController: UIViewController {
             self.subTitleLabel.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
             self.subTitleLabel.topAnchor.constraint(equalTo: self.titleLabel.bottomAnchor, constant: 20),
             
-            self.weightInput.topAnchor.constraint(equalTo: self.subTitleLabel.bottomAnchor, constant: 40),
+            self.weightLabel.topAnchor.constraint(equalTo: self.subTitleLabel.bottomAnchor, constant: 20),
+            self.weightLabel.centerXAnchor.constraint(equalTo: self.weightInput.centerXAnchor),
+            
+            self.heightLabel.topAnchor.constraint(equalTo: self.subTitleLabel.bottomAnchor, constant: 20),
+            self.heightLabel.centerXAnchor.constraint(equalTo: self.heigthInput.centerXAnchor),
+            
+            self.weightInput.topAnchor.constraint(equalTo: self.weightLabel.bottomAnchor, constant: 10),
             self.weightInput.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 20),
             self.weightInput.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -220),
             self.weightInput.heightAnchor.constraint(equalToConstant: 40),
             
-            self.heigthInput.topAnchor.constraint(equalTo: self.subTitleLabel.bottomAnchor, constant: 40),
+            self.heigthInput.topAnchor.constraint(equalTo: self.heightLabel.bottomAnchor, constant: 10),
             self.heigthInput.leadingAnchor.constraint(equalTo: self.weightInput.trailingAnchor, constant: 40),
             self.heigthInput.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -20),
             self.heigthInput.heightAnchor.constraint(equalTo: self.weightInput.heightAnchor),
@@ -142,10 +185,15 @@ class ViewController: UIViewController {
             self.calculateButton.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -20),
             self.calculateButton.heightAnchor.constraint(equalTo: self.weightInput.heightAnchor),
             
-            self.resultImage.topAnchor.constraint(equalTo: self.calculateButton .bottomAnchor, constant: 50)
+            self.textLabel.topAnchor.constraint(equalTo: self.calculateButton.bottomAnchor, constant: 20),
+            self.textLabel.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
             
+            self.resultLabel.topAnchor.constraint(equalTo: self.textLabel.bottomAnchor, constant: 20),
+            self.resultLabel.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
             
-        
+            self.resultImage.topAnchor.constraint(equalTo: self.resultLabel .bottomAnchor, constant: 30),
+            self.resultImage.centerXAnchor.constraint(equalTo: self.view.centerXAnchor)
+       
         ])
     }
     
