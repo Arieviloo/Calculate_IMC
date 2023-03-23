@@ -9,6 +9,8 @@ import UIKit
 
 class ViewController: UIViewController {
     
+    var imc: Double = 0
+    
     lazy var titleLabel: UILabel = {
         let title = UILabel()
         title.translatesAutoresizingMaskIntoConstraints = false
@@ -63,6 +65,13 @@ class ViewController: UIViewController {
         btn.addTarget(self, action: #selector(self.tappedCalculate), for: .touchUpInside)
         return btn
     }()
+    
+    lazy var resultImage:UIImageView = {
+       let img = UIImageView()
+        img.translatesAutoresizingMaskIntoConstraints = false
+        img.contentMode = .scaleAspectFit
+        return img
+    }()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -72,13 +81,42 @@ class ViewController: UIViewController {
         self.view.addSubview(self.weightInput)
         self.view.addSubview(self.heigthInput)
         self.view.addSubview(self.calculateButton)
+        self.view.addSubview(self.resultImage)
         self.setUpConstraints()
     }
     
     @objc func tappedCalculate(){
-        let valueWeight = Double(weightInput.text!)
-        let valueHeight = Double(heigthInput.text!)
-        print(valueHeight)
+     
+        if let weight = Double(self.weightInput.text!), let height = Double(self.heigthInput.text!) {
+            imc = weight / (height*height)
+            
+            var result: String = ""
+            var image: String = ""
+            switch imc {
+            case 0..<16:
+                result = "Magreza"
+                image = "abaixo"
+            case 16..<18.5:
+                result = "Abaixo do peso"
+                image = "abaixo"
+            case 18.5..<25:
+                result = "Peso ideal"
+                image = "ideal"
+            case 25..<30:
+                result = "Sobrepeso"
+                image = "sobre"
+            default:
+                result = "Obesidade"
+                image = "obesidade"
+                
+            }
+            
+            self.resultImage.image = UIImage(named: image)
+        }
+     
+        
+    
+        print(imc)
     }
     
     private func setUpConstraints() {
@@ -102,7 +140,9 @@ class ViewController: UIViewController {
             self.calculateButton.topAnchor.constraint(equalTo: self.heigthInput.bottomAnchor,constant: 30),
             self.calculateButton.leadingAnchor.constraint(equalTo: self.view.leadingAnchor,constant: 20),
             self.calculateButton.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -20),
-            self.calculateButton.heightAnchor.constraint(equalTo: self.weightInput.heightAnchor)
+            self.calculateButton.heightAnchor.constraint(equalTo: self.weightInput.heightAnchor),
+            
+            self.resultImage.topAnchor.constraint(equalTo: self.calculateButton .bottomAnchor, constant: 50)
             
             
         
