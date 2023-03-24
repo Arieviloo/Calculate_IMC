@@ -1,13 +1,13 @@
 //
-//  ViewController.swift
+//  CalculatorScreen.swift
 //  imc
 //
-//  Created by Jadiê on 22/03/23.
+//  Created by Jadiê on 24/03/23.
 //
 
 import UIKit
 
-class ViewController: UIViewController {
+class CalculatorScreen: UIView {
     
     lazy var titleLabel: UILabel = {
         let title = UILabel()
@@ -101,31 +101,39 @@ class ViewController: UIViewController {
     }()
     
     lazy var resultImage:UIImageView = {
-       let img = UIImageView()
+        let img = UIImageView()
         img.translatesAutoresizingMaskIntoConstraints = false
         img.contentMode = .scaleAspectFit
         return img
     }()
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        self.view.backgroundColor = .red
-        self.view.addSubview(self.titleLabel)
-        self.view.addSubview(self.subTitleLabel)
-        self.view.addSubview(self.weightInput)
-        self.view.addSubview(self.heigthInput)
-        self.view.addSubview(self.calculateButton)
-        self.view.addSubview(self.textLabel)
-        self.view.addSubview(self.resultLabel)
-        self.view.addSubview(self.resultImage)
-        self.view.addSubview(self.weightLabel)
-        self.view.addSubview(self.heightLabel)
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        
+        self.addSubview(self.titleLabel)
+        self.addSubview(self.subTitleLabel)
+        self.addSubview(self.weightInput)
+        self.addSubview(self.heigthInput)
+        self.addSubview(self.calculateButton)
+        self.addSubview(self.textLabel)
+        self.addSubview(self.resultLabel)
+        self.addSubview(self.resultImage)
+        self.addSubview(self.weightLabel)
+        self.addSubview(self.heightLabel)
+        
+        self.backgroundColor = .red
+        
         self.setUpConstraints()
     }
     
-    @objc func tappedCalculate(){
-     
-        if let weight = Double(weightInput.text!), let height = Double(heigthInput.text!) {
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    
+    @objc private func tappedCalculate(){
+        
+        if let weight = Double(self.weightInput.text!), let height = Double(self.heigthInput.text!) {
             var imc: Double = 0
             imc = weight / (height*height)
             
@@ -153,15 +161,15 @@ class ViewController: UIViewController {
             self.resultLabel.text = "\(Int(imc)): \(result) "
             self.resultImage.image = UIImage(named: image)
         }
-     
+        
     }
     
     private func setUpConstraints() {
         NSLayoutConstraint.activate([
-            self.titleLabel.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
-            self.titleLabel.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor),
+            self.titleLabel.centerXAnchor.constraint(equalTo: self.centerXAnchor),
+            self.titleLabel.topAnchor.constraint(equalTo: self.safeAreaLayoutGuide.topAnchor),
             
-            self.subTitleLabel.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
+            self.subTitleLabel.centerXAnchor.constraint(equalTo: self.centerXAnchor),
             self.subTitleLabel.topAnchor.constraint(equalTo: self.titleLabel.bottomAnchor, constant: 20),
             
             self.weightLabel.topAnchor.constraint(equalTo: self.subTitleLabel.bottomAnchor, constant: 20),
@@ -171,34 +179,34 @@ class ViewController: UIViewController {
             self.heightLabel.centerXAnchor.constraint(equalTo: self.heigthInput.centerXAnchor),
             
             self.weightInput.topAnchor.constraint(equalTo: self.weightLabel.bottomAnchor, constant: 10),
-            self.weightInput.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 20),
-            self.weightInput.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -220),
+            self.weightInput.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 20),
+            self.weightInput.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -220),
             self.weightInput.heightAnchor.constraint(equalToConstant: 40),
             
             self.heigthInput.topAnchor.constraint(equalTo: self.heightLabel.bottomAnchor, constant: 10),
             self.heigthInput.leadingAnchor.constraint(equalTo: self.weightInput.trailingAnchor, constant: 40),
-            self.heigthInput.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -20),
+            self.heigthInput.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -20),
             self.heigthInput.heightAnchor.constraint(equalTo: self.weightInput.heightAnchor),
             
             self.calculateButton.topAnchor.constraint(equalTo: self.heigthInput.bottomAnchor,constant: 30),
-            self.calculateButton.leadingAnchor.constraint(equalTo: self.view.leadingAnchor,constant: 20),
-            self.calculateButton.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -20),
+            self.calculateButton.leadingAnchor.constraint(equalTo: self.leadingAnchor,constant: 20),
+            self.calculateButton.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -20),
             self.calculateButton.heightAnchor.constraint(equalTo: self.weightInput.heightAnchor),
             
             self.textLabel.topAnchor.constraint(equalTo: self.calculateButton.bottomAnchor, constant: 20),
-            self.textLabel.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
+            self.textLabel.centerXAnchor.constraint(equalTo: self.centerXAnchor),
             
             self.resultLabel.topAnchor.constraint(equalTo: self.textLabel.bottomAnchor, constant: 20),
-            self.resultLabel.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
+            self.resultLabel.centerXAnchor.constraint(equalTo: self.centerXAnchor),
             
             self.resultImage.topAnchor.constraint(equalTo: self.resultLabel .bottomAnchor, constant: 30),
-            self.resultImage.centerXAnchor.constraint(equalTo: self.view.centerXAnchor)
-       
+            self.resultImage.centerXAnchor.constraint(equalTo: self.centerXAnchor)
+            
         ])
     }
     
-    
-
-
 }
+
+
+
 

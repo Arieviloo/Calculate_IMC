@@ -16,7 +16,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
        
         guard let windowscene = (scene as? UIWindowScene) else { return }
         let window = UIWindow(windowScene: windowscene)
-        let vc = ViewController()
+        let vc:CalculatorViewController = CalculatorViewController()
         let navVc = UINavigationController(rootViewController: vc)
         window.rootViewController = navVc
         window.makeKeyAndVisible()
