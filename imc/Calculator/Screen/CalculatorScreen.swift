@@ -6,8 +6,17 @@
 //
 
 import UIKit
+protocol CalculatorScreenProtocol:class {
+    func actionCalculateButton()
+}
 
 class CalculatorScreen: UIView {
+    
+    private weak var delegate:CalculatorScreenProtocol?
+    
+    func delegate(delegate: CalculatorScreenProtocol) {
+        self.delegate = delegate
+    }
     
     lazy var titleLabel: UILabel = {
         let title = UILabel()
@@ -69,7 +78,7 @@ class CalculatorScreen: UIView {
         tf.autocorrectionType = .no
         tf.backgroundColor = .white
         tf.borderStyle = .roundedRect
-        tf.keyboardType = .decimalPad
+        tf.keyboardType = .default
         tf.placeholder = "Ex: 80"
         tf.textColor = .gray
         return tf
@@ -81,7 +90,7 @@ class CalculatorScreen: UIView {
         tf.autocorrectionType = .no
         tf.backgroundColor = .white
         tf.borderStyle = .roundedRect
-        tf.keyboardType = .decimalPad
+        tf.keyboardType = .default
         tf.placeholder = "Ex: 1.70"
         tf.textColor = .gray
         return tf
@@ -95,7 +104,7 @@ class CalculatorScreen: UIView {
         btn.setTitleColor(.white, for: .normal)
         btn.clipsToBounds = true
         btn.layer.cornerRadius = 7.5
-        btn.backgroundColor = UIColor(red: 3/255, green: 58/255, blue: 51/255, alpha: 1.0)
+        btn.backgroundColor = UIColor(red: 128/255, green: 128/255, blue: 128/255, alpha: 1.0)
         btn.addTarget(self, action: #selector(self.tappedCalculate), for: .touchUpInside)
         return btn
     }()
@@ -109,7 +118,27 @@ class CalculatorScreen: UIView {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
+        self.backgroundColor = UIColor(red: 153/255, green: 153/255, blue: 255/255, alpha: 1.0)
+       
+        self.configSuperView()
+        self.setUpConstraints()
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    public func configTextFieldDelegate(delegate:UITextFieldDelegate) {
+        self.heigthInput.delegate = delegate
+        self.weightInput.delegate = delegate
+    }
+//
+    @objc private func tappedCalculate(){
         
+        self.delegate?.actionCalculateButton()
+    }
+    
+    private func configSuperView() {
         self.addSubview(self.titleLabel)
         self.addSubview(self.subTitleLabel)
         self.addSubview(self.weightInput)
@@ -120,48 +149,6 @@ class CalculatorScreen: UIView {
         self.addSubview(self.resultImage)
         self.addSubview(self.weightLabel)
         self.addSubview(self.heightLabel)
-        
-        self.backgroundColor = .red
-        
-        self.setUpConstraints()
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
-    
-    @objc private func tappedCalculate(){
-        
-        if let weight = Double(self.weightInput.text!), let height = Double(self.heigthInput.text!) {
-            var imc: Double = 0
-            imc = weight / (height*height)
-            
-            var result: String = ""
-            var image: String = ""
-            switch imc {
-            case 0..<16:
-                result = "Magreza"
-                image = "abaixo"
-            case 16..<18.5:
-                result = "Abaixo do peso"
-                image = "abaixo"
-            case 18.5..<25:
-                result = "Peso ideal"
-                image = "ideal"
-            case 25..<30:
-                result = "Sobrepeso"
-                image = "sobre"
-            default:
-                result = "Obesidade"
-                image = "obesidade"
-                
-            }
-            self.textLabel.text = "Seu índice de massa corporal é"
-            self.resultLabel.text = "\(Int(imc)): \(result) "
-            self.resultImage.image = UIImage(named: image)
-        }
-        
     }
     
     private func setUpConstraints() {
