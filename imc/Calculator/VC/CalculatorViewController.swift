@@ -25,6 +25,10 @@ class CalculatorViewController: UIViewController {
 }
 
 extension CalculatorViewController:UITextFieldDelegate {
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        self.calculatorScreen?.validateTextField()
+    }
+    
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
     }
@@ -34,6 +38,7 @@ extension CalculatorViewController:CalculatorScreenProtocol {
     func actionCalculateButton() {
         
         if let weight = Double((self.calculatorScreen?.weightInput.text)!), let height = Double((self.calculatorScreen?.heigthInput.text)!) {
+            
             var imc: Double = 0
             imc = weight / (height*height)
             

@@ -55,7 +55,6 @@ class CalculatorScreen: UIView {
     }()
     
     
-    
     lazy var textLabel: UILabel = {
         let title = UILabel()
         title.translatesAutoresizingMaskIntoConstraints = false
@@ -68,9 +67,10 @@ class CalculatorScreen: UIView {
         let title = UILabel()
         title.translatesAutoresizingMaskIntoConstraints = false
         title.textColor = .white
-        title.font = UIFont.systemFont(ofSize: 24)
+        title.font = UIFont.systemFont(ofSize: 24, weight: .bold)
         return title
     }()
+    
     
     lazy var weightInput: UITextField = {
         let tf = UITextField()
@@ -100,8 +100,7 @@ class CalculatorScreen: UIView {
         let btn = UIButton()
         btn.translatesAutoresizingMaskIntoConstraints = false
         btn.setTitle("Calcular", for: .normal)
-        btn.titleLabel?.font = UIFont.systemFont(ofSize: 18)
-        btn.setTitleColor(.white, for: .normal)
+        btn.titleLabel?.font = UIFont.systemFont(ofSize: 18, weight: .bold)
         btn.clipsToBounds = true
         btn.layer.cornerRadius = 7.5
         btn.backgroundColor = UIColor(red: 128/255, green: 128/255, blue: 128/255, alpha: 1.0)
@@ -119,7 +118,8 @@ class CalculatorScreen: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         self.backgroundColor = UIColor(red: 153/255, green: 153/255, blue: 255/255, alpha: 1.0)
-       
+        self.calculateButton.setTitleColor(.lightGray, for: .normal)
+        
         self.configSuperView()
         self.setUpConstraints()
     }
@@ -132,10 +132,27 @@ class CalculatorScreen: UIView {
         self.heigthInput.delegate = delegate
         self.weightInput.delegate = delegate
     }
-//
+    
     @objc private func tappedCalculate(){
-        
         self.delegate?.actionCalculateButton()
+    }
+    
+    public func validateTextField() {
+        let height:String = self.heigthInput.text ?? ""
+        let weight:String = self.weightInput.text ?? ""
+        
+        if !weight.isEmpty && !height.isEmpty {
+            self.configBtnValidate(true)
+        }else {
+            self.configBtnValidate(false)
+        }
+    }
+    
+    private func configBtnValidate(_ enable:Bool) {
+        self.calculateButton.setTitleColor(enable ? .gray : .lightGray, for: .normal)
+        self.calculateButton.backgroundColor = enable ? UIColor(red: 157/255, green: 255/255, blue: 128/255, alpha: 1.0) : UIColor(red: 128/255, green: 128/255, blue: 128/255, alpha: 1.0)
+
+        self.calculateButton.isEnabled = enable
     }
     
     private func configSuperView() {
